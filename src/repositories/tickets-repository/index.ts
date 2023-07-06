@@ -11,15 +11,23 @@ export async function selectTicketsByToken(token: string) {
     },
   });
 
-  const enrollment = await prisma.enrollment.findUnique({
+  return prisma.ticket.findMany({
     where: {
-      userId: session.userId,
+      Enrollment: {
+        userId: session.userId,
+      },
     },
   });
 
-  return prisma.ticket.findMany({
-    where: {
-      enrollmentId: enrollment.id,
-    },
-  });
+  // const enrollment = await prisma.enrollment.findFirst({
+  //   where: {
+  //     userId: session.userId
+  //   }
+  // })
+
+  // return prisma.ticket.findFirst({
+  //   where: {
+  //     enrollmentId: enrollment.id
+  //   }
+  // })
 }
