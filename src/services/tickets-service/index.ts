@@ -12,5 +12,7 @@ export async function getUserTicketsByToken(token: string) {
 
   const response = await selectTicketsByUserId(session.userId);
 
+  if (!response) throw notFoundError();
+
   return response;
 }
