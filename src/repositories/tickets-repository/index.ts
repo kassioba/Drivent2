@@ -32,3 +32,13 @@ export async function selectTicketsByUserId(userId: number) {
     },
   });
 }
+
+export async function insertTicket(ticketTypeId: number, enrollmentId: number) {
+  return prisma.ticket.create({
+    data: {
+      status: 'RESERVED',
+      ticketTypeId,
+      enrollmentId,
+    },
+  });
+}
