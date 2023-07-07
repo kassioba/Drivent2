@@ -21,7 +21,7 @@ export async function selectEnrollmentByUserId(userId: number) {
 }
 
 export async function selectTicketsByUserId(userId: number) {
-  return prisma.ticket.findMany({
+  return prisma.ticket.findFirst({
     where: {
       Enrollment: {
         userId,
