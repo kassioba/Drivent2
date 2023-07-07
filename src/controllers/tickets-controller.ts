@@ -14,7 +14,11 @@ export async function getUserTickets(req: Request, res: Response) {
   const token = req.headers.authorization;
 
   try {
-    res.send(await getUserTicketsByToken(token));
+    const ticket = await getUserTicketsByToken(token);
+
+    console.log(ticket);
+
+    res.send(ticket);
   } catch (err) {
     if (err.name === 'NotFoundError') return res.status(httpStatus.NOT_FOUND).send(err.message);
 
@@ -27,7 +31,7 @@ export async function createNewTicket(req: Request, res: Response) {
   const token = req.headers.authorization;
 
   try {
-    res.send(await createAndSendNewTicket(ticketTypeId, token));
+    res.status(httpStatus.CREATED).send(await createAndSendNewTicket(ticketTypeId, token));
   } catch (err) {
     if (err.name === 'NotFoundError') return res.status(httpStatus.NOT_FOUND).send(err.message);
 
