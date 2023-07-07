@@ -16,7 +16,7 @@ export async function getUserTickets(req: Request, res: Response) {
   try {
     res.send(await getUserTicketsByToken(token));
   } catch (err) {
-    if (err.type === 'Not found') res.status(httpStatus.NOT_FOUND).send(err.message);
+    if (err.name === 'NotFoundError') return res.status(httpStatus.NOT_FOUND).send(err.message);
 
     res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
   }

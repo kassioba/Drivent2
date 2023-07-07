@@ -1,6 +1,8 @@
-export function notFoundError() {
+import { ApplicationError } from '@/protocols';
+
+export function notFoundError(): ApplicationError {
   return {
-    type: 'Not found',
+    name: 'Not found',
     message: 'Data do not exist',
   };
 }

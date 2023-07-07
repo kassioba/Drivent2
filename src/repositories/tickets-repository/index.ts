@@ -12,6 +12,14 @@ export async function selectSessionByToken(token: string) {
   });
 }
 
+export async function selectEnrollmentByUserId(userId: number) {
+  return await prisma.enrollment.findFirst({
+    where: {
+      userId,
+    },
+  });
+}
+
 export async function selectTicketsByUserId(userId: number) {
   return prisma.ticket.findMany({
     where: {
@@ -19,17 +27,8 @@ export async function selectTicketsByUserId(userId: number) {
         userId,
       },
     },
+    include: {
+      TicketType: true,
+    },
   });
-
-  // const enrollment = await prisma.enrollment.findFirst({
-  //   where: {
-  //     userId: session.userId
-  //   }
-  // })
-
-  // return prisma.ticket.findFirst({
-  //   where: {
-  //     enrollmentId: enrollment.id
-  //   }
-  // })
 }

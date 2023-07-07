@@ -1,5 +1,10 @@
 import { notFoundError } from '@/errors';
-import { selectAllTicketsType, selectSessionByToken, selectTicketsByUserId } from '@/repositories/tickets-repository';
+import {
+  selectAllTicketsType,
+  selectEnrollmentByUserId,
+  selectSessionByToken,
+  selectTicketsByUserId,
+} from '@/repositories/tickets-repository';
 
 export async function getTicketTypes() {
   return await selectAllTicketsType();
@@ -8,11 +13,13 @@ export async function getTicketTypes() {
 export async function getUserTicketsByToken(token: string) {
   const session = await selectSessionByToken(token.split(' ')[1]);
 
-  if (!session) throw notFoundError();
+  const enrollment = await selectEnrollmentByUserId(session.userId);
+
+  if (!enrollment) throw notFoundError();
 
   const response = await selectTicketsByUserId(session.userId);
 
-  if (!response) throw notFoundError();
+  if (!response[0]) throw notFoundError();
 
   return response;
 }
