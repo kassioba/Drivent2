@@ -4,17 +4,19 @@ export async function selectAllTicketsType() {
   return prisma.ticketType.findMany();
 }
 
-export async function selectTicketsByToken(token: string) {
-  const session = await prisma.session.findFirst({
+export async function selectSessionByToken(token: string) {
+  return await prisma.session.findFirst({
     where: {
       token,
     },
   });
+}
 
+export async function selectTicketsByUserId(userId: number) {
   return prisma.ticket.findMany({
     where: {
       Enrollment: {
-        userId: session.userId,
+        userId,
       },
     },
   });
