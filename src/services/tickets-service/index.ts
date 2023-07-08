@@ -3,7 +3,6 @@ import {
   insertTicket,
   selectAllTicketsType,
   selectEnrollmentByUserId,
-  selectSessionByToken,
   selectTicketsByUserId,
 } from '@/repositories/tickets-repository';
 
@@ -11,28 +10,24 @@ export async function getTicketTypes() {
   return await selectAllTicketsType();
 }
 
-export async function getUserTicketsByToken(token: string) {
-  const session = await selectSessionByToken(token.split(' ')[1]);
-
-  const enrollment = await selectEnrollmentByUserId(session.userId);
+export async function getUserTicketsByToken(userId: number) {
+  const enrollment = await selectEnrollmentByUserId(userId);
 
   if (!enrollment) throw notFoundError();
 
-  const tickets = await selectTicketsByUserId(session.userId);
+  const tickets = await selectTicketsByUserId(userId);
 
   if (!tickets) throw notFoundError();
 
   return tickets;
 }
 
-export async function createAndSendNewTicket(ticketTypeId: number, token: string) {
-  const session = await selectSessionByToken(token.split(' ')[1]);
-
-  const enrollment = await selectEnrollmentByUserId(session.userId);
+export async function createAndSendNewTicket(ticketTypeId: number, userId: number) {
+  const enrollment = await selectEnrollmentByUserId(userId);
 
   if (!enrollment) throw notFoundError();
 
   await insertTicket(ticketTypeId, enrollment.id);
 
-  return await selectTicketsByUserId(session.userId);
+  return await selectTicketsByUserId(userId);
 }

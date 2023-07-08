@@ -11,12 +11,12 @@ export async function getAllTicketTypes(req: Request, res: Response) {
 }
 
 export async function getUserTickets(req: Request, res: Response) {
-  const token = req.headers.authorization;
+  const userId = res.locals.userId;
 
   try {
-    const ticket = await getUserTicketsByToken(token);
+    const ticket = await getUserTicketsByToken(userId);
 
-    res.send(ticket);
+    res.status(httpStatus.OK).send(ticket);
   } catch (err) {
     if (err.name === 'NotFoundError') return res.status(httpStatus.NOT_FOUND).send(err.message);
 
@@ -26,12 +26,16 @@ export async function getUserTickets(req: Request, res: Response) {
 
 export async function createNewTicket(req: Request, res: Response) {
   const { ticketTypeId } = req.body;
-  const token = req.headers.authorization;
+  const userId = res.locals.userId;
 
   try {
-    res.status(httpStatus.CREATED).send(await createAndSendNewTicket(ticketTypeId, token));
+    const ticket = await createAndSendNewTicket(ticketTypeId, userId);
+
+    res.status(httpStatus.CREATED).send(ticket);
   } catch (err) {
     if (err.name === 'NotFoundError') return res.status(httpStatus.NOT_FOUND).send(err.message);
+
+    console.log(err.message);
 
     res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
   }
