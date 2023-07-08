@@ -16,13 +16,13 @@ export async function getUserTicketsByToken(token: string) {
 
   const enrollment = await selectEnrollmentByUserId(session.userId);
 
-  if (enrollment === null) throw notFoundError();
+  if (!enrollment) throw notFoundError();
 
-  const ticket = await selectTicketsByUserId(session.userId);
+  const tickets = await selectTicketsByUserId(session.userId);
 
-  if (ticket === null) throw notFoundError();
+  if (!tickets) throw notFoundError();
 
-  return ticket;
+  return tickets;
 }
 
 export async function createAndSendNewTicket(ticketTypeId: number, token: string) {
@@ -30,7 +30,7 @@ export async function createAndSendNewTicket(ticketTypeId: number, token: string
 
   const enrollment = await selectEnrollmentByUserId(session.userId);
 
-  if (enrollment === null) throw notFoundError();
+  if (!enrollment) throw notFoundError();
 
   await insertTicket(ticketTypeId, enrollment.id);
 
